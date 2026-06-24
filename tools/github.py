@@ -20,8 +20,16 @@ def fetch_recent_commits(github_token: str, repo_name: str) -> list:
         user = g.get_user()
         user_login = user.login
 
+        if not user_login:
+            logger.error("===== Failed to retrieve authenticated user information. Check your token. =====")
+            return []
+
         logger.info(f"===== Authenticating user '{user_login}' for repo '{repo_name}' =====")
         repo = g.get_repo(repo_name)
+
+        if not repo:
+            logger.error(f"===== Failed to access repository '{repo_name}'. Check your permissions. =====")
+            return []
 
         time_threshold = datetime.now(timezone.utc) - timedelta(days=1)
         commits = repo.get_commits(since = time_threshold)
