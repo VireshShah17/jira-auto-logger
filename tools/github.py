@@ -39,7 +39,7 @@ def fetch_recent_commits(github_token: str, repo_name: str) -> list:
 
         return recent_commits
     except Exception as e:
-        logger.error(f"Failed to fetch github commits: {str(e)}")
+        logger.error(f"===== Failed to fetch github commits: {str(e)} =====")
 
         return []
 
@@ -54,10 +54,10 @@ if __name__ == "__main__":
     TEST_TOKEN = os.getenv("GITHUB_TOKEN") # Temporarily put a token in your .env for this test
     
     if TEST_TOKEN:
-        print("Testing GitHub Tool...")
+        logger.info("===== Testing GitHub Tool... =====")
         logs = fetch_recent_commits(TEST_TOKEN, TEST_REPO)
         print(f"Found {len(logs)} commits in the last 24 hours:")
         for log in logs:
-            print(f"- [{log['sha']}] {log['message']}")
+            logger.info(f"----- [{log['sha']}] {log['message']} -----")
     else:
-        print("Skipping local test. Please populate GITHUB_TOKEN and TEST_REPO in your environment.")
+        logger.error("===== Skipping local test. Please populate GITHUB_TOKEN and TEST_REPO in your environment. =====")
